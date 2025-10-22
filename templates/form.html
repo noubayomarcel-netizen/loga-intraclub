@@ -1,57 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Athlete Registration</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      padding: 0;
-      background-color: #f9f9f9;
-    }
-    h2 {
-      text-align: center;
-    }
-    form {
-      max-width: 400px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, button {
-      width: 100%;
-      margin-bottom: 12px;
-      padding: 12px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
-</head>
-<body>
-  <h2>Register Athlete</h2>
-  <form method="POST">
-    <input name="name" placeholder="Name" required>
-    <input name="age" type="number" placeholder="Age" required>
-    <input name="weight" type="number" step="0.1" placeholder="Weight (kg)" required>
-    <input name="belt" placeholder="Belt" required>
-    <input name="medical" placeholder="Medical Clearance (Yes/No)" required>
-    <input name="waiver" placeholder="Waiver Agreement (Yes/No)" required>
-    <input name="emergency" placeholder="Emergency Contact" required>
-    <button type="submit">Register</button>
-  </form>
-</body>
-</html>
-
-
+<form method="POST">
+  <input name="name" placeholder="Name" required>
+  <input name="age" type="number" placeholder="Age" required>
+  <input name="weight" type="number" step="0.1" placeholder="Weight (kg)" required>
+  <select name="sport" required>
+    <option value="">Select Sport</option>
+    <option value="BJJ">BJJ</option>
+    <option value="Wrestling">Wrestling</option>
+  </select>
+  <input name="belt" placeholder="Belt" required>
+  <input name="medical" placeholder="Medical Clearance (Yes/No)" required>
+  <input name="waiver" placeholder="Waiver Agreement (Yes/No)" required>
+  <input name="emergency" placeholder="Emergency Contact" required>
+  <button type="submit">Register</button>
+</form>

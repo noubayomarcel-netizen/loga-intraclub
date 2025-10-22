@@ -4,61 +4,15 @@
   <title>Score Matches</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f9f9f9;
-    }
-    h2 {
-      text-align: center;
-    }
-    .match {
-      background: white;
-      padding: 15px;
-      margin-bottom: 25px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    }
-    select, button {
-      width: 100%;
-      margin: 10px 0;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-    button[type="submit"] {
-      background-color: #007bff;
-      color: white;
-      border: none;
-    }
-    button[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-    .timer {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
-    .timer p {
-      flex: 1 1 100%;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .timer button {
-      flex: 1 1 30%;
-      margin: 5px;
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 4px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-    }
-    .timer button:hover {
-      background-color: #218838;
-    }
+    body { font-family: Arial; margin: 20px; background-color: #f9f9f9; }
+    .match { background: white; padding: 15px; margin-bottom: 25px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    select, button { width: 100%; margin: 10px 0; padding: 12px; font-size: 16px; border-radius: 4px; border: 1px solid #ccc; }
+    button[type="submit"] { background-color: #007bff; color: white; border: none; }
+    button[type="submit"]:hover { background-color: #0056b3; }
+    .timer { display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 10px; }
+    .timer p { flex: 1 1 100%; font-weight: bold; margin-bottom: 10px; }
+    .timer button { flex: 1 1 30%; margin: 5px; padding: 10px; font-size: 14px; border-radius: 4px; background-color: #28a745; color: white; border: none; }
+    .timer button:hover { background-color: #218838; }
   </style>
 </head>
 <body>
@@ -97,14 +51,13 @@
     </div>
   {% endfor %}
 
-  <!-- Sound alert -->
   <audio id="alertSound" src="https://www.soundjay.com/button/beep-07.mp3" preload="auto"></audio>
 
   <script>
     const timers = {};
     const intervals = {};
     const alertSound = document.getElementById("alertSound");
-    const matchDuration = 300; // 5 minutes in seconds
+    const matchDuration = 300;
 
     function startTimer(id) {
       if (!timers[id]) timers[id] = 0;
@@ -130,8 +83,3 @@
     function resetTimer(id) {
       stopTimer(id);
       timers[id] = 0;
-      document.getElementById(`timer${id}`).textContent = "00:00";
-    }
-  </script>
-</body>
-</html>

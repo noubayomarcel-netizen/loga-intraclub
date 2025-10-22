@@ -1,54 +1,61 @@
-from flask import Flask, render_template, request
-import register
-import grouping
-import brackets
-import score_sheets
-from scoring import add_action, decide_winner
+from flask import Flask, render_template, request, redirect, session, send_file
+from register import save_athlete
+from grouping import generate_brackets
+from scoring import match_sheets, update_score, export_results
+from admin import check_login, get_dashboard_data
+import os
 
 app = Flask(__name__)
+app.secret_key = "securekey123"
+brackets = []
+sheets = []
 
-# These will be created after registration
-groups = []
-brackets_data = []
-match_sheets = []
+@app.route("/")
+def landing():
+    return render_template("landing.html")
 
-@app.route("/", methods=["GET", "POST"])
-def home():
-    global groups, brackets_data, match_sheets
+@app.route("/login", methods=["GET", "POST"])
+def login():
     if request.method == "POST":
-        # Save athlete info
-        register.register_athlete(
-            request.form["name"],
-            int(request.form["age"]),
-            float(request.form["weight"]),
-            request.form["belt"],
-            request.form["medical"],
-            request.form["waiver"],
-            request.form["emergency"]
-        )
-        # After registration, regenerate groups and brackets
-        groups = grouping.group_by_weight()
-        brackets_data = brackets.generate_brackets(groups)
-        match_sheets = score_sheets.create_score_sheets(brackets_data)
+        if check_login(request.form["username"], request.form["password"]):
+            session["admin"] = True
+            return redirect("/dashboard")
+    return render_template("login.html")
+
+@app.route("/dashboard")
+def dashboard():
+    if not session.get("admin"):
+        return redirect("/login")
+    data = get_dashboard_data()
+    return render_template("dashboard.html", data=data)
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        save_athlete(request.form.to_dict())
+        global brackets, sheets
+        brackets = generate_brackets()
+        sheets = match_sheets(brackets)
+        return redirect("/brackets")
     return render_template("form.html")
 
 @app.route("/brackets")
 def show_brackets():
-    return render_template("brackets.html", brackets=brackets_data)
+    return render_template("brackets.html", brackets=brackets)
 
 @app.route("/score", methods=["GET", "POST"])
-def score_match():
-    global match_sheets
+def score():
     if request.method == "POST":
         match_id = int(request.form["match_id"])
         athlete = request.form["athlete"]
         action = request.form["action"]
-        add_action(match_sheets[match_id], athlete, action)
-        decide_winner(match_sheets[match_id])
-    return render_template("score.html", sheets=match_sheets)
+        update_score(sheets[match_id], athlete, action)
+    return render_template("score.html", sheets=sheets)
+
+@app.route("/export")
+def export():
+    export_results(sheets)
+    return send_file("results.pdf", as_attachment=True)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
-
-
