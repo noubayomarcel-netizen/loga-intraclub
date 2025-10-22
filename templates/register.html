@@ -1,8 +1,70 @@
-<ul>
-{% for athlete in athletes %}
-  <li>
-    {{ athlete.name }} ({{ athlete.sport }})
-    <a href="/delete/{{ athlete.name }}" style="color:red;">Delete</a>
-  </li>
-{% endfor %}
-</ul>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register Athletes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .athlete-list {
+      max-width: 500px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .athlete-list ul {
+      list-style: none;
+      padding: 0;
+    }
+    .athlete-list li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .athlete-list a {
+      color: red;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .clear-button {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .clear-button a {
+      background: #dc3545;
+      color: white;
