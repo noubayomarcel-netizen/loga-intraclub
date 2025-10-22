@@ -87,6 +87,7 @@
     <button type="submit">Register</button>
   </form>
 
+  {% if athletes %}
   <div class="athlete-list">
     <h3>Registered Athletes</h3>
     <ul>
@@ -102,6 +103,8 @@
       <a href="/clear">Clear All Athletes</a>
     </div>
   </div>
+  {% endif %}
 </body>
 </html>
+
 
