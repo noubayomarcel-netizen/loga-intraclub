@@ -1,0 +1,8 @@
+<ul>
+{% for athlete in athletes %}
+  <li>
+    {{ athlete.name }} ({{ athlete.sport }})
+    <a href="/delete/{{ athlete.name }}" style="color:red;">Delete</a>
+  </li>
+{% endfor %}
+</ul>

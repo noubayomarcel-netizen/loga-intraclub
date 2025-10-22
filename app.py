@@ -51,6 +51,14 @@ def score():
         action = request.form["action"]
         update_score(sheets[match_id], athlete, action)
     return render_template("score.html", sheets=sheets)
+if request.method == "POST":
+    match_id = int(request.form["match_id"])
+    if "medal" in request.form:
+        sheets[match_id]["medal"] = request.form["medal"]
+    else:
+        athlete = request.form["athlete"]
+        action = request.form["action"]
+        update_score(sheets[match_id], athlete, action)
 
 @app.route("/export")
 def export():
@@ -59,3 +67,24 @@ def export():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+    @app.route("/charts")
+def charts():
+    return render_template("charts.html")
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
+@app.route("/delete/<name>")
+def delete_athlete(name):
+    global athletes
+    athletes = [a for a in athletes if a["name"] != name]
+    return redirect("/register")
+
+@app.route("/clear")
+def clear_athletes():
+    global athletes, brackets, sheets
+    athletes = []
+    brackets = []
+    sheets = []
+    return redirect("/register")
+
