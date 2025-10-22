@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Score Matches</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+    }
+    .match {
+      background: white;
+      padding: 15px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    select, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      border: none;
+    }
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    .timer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .timer p {
+      flex: 1 1 100%;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .timer button {
+      flex: 1 1 30%;
+      margin: 5px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 4px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+    }
+    .timer button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h2>Score Matches</h2>
+  {% for match in sheets %}
+    <div class="match">
+      <h3>Match {{ loop.index }}</h3>
+      <p><strong>A:</strong> {{ match["A"] }} | <strong>B:</strong> {{ match["B"] }}</p>
+      <p><strong>Score A:</strong> {{ match["score_A"] }} | <strong>Score B:</strong> {{ match["score_B"] }}</p>
+      <p><strong>Winner:</strong> {{ match["winner"] }}</p>
+
+      <form method="POST">
+        <input type="hidden" name="match_id" value="{{ loop.index0 }}">
+        <select name="athlete">
+          <option value="A">Athlete A</option>
+          <option value="B">Athlete B</option>
+        </select>
+        <select name="action">
+          <option value="takedown">Takedown (2 pts)</option>
+          <option value="guard_pass">Guard Pass (3 pts)</option>
+          <option value="sweep">Sweep (2 pts)</option>
+          <option value="submission">Submission (5 pts)</option>
+        </select>
+        <button type="submit">Add Points</button>
+      </form>
+
+      <div class="timer">
+        <p>Time: <span id="timer{{ loop.index0 }}">00:00</span></p>
+        <button type="button" onclick="startTimer({{ loop.index0 }})">Start</button>
+        <button type="button" onclick="stopTimer({{ loop.index0 }})">Stop</button>
+        <button type="button" onclick="resetTimer({{ loop.index0 }})">Reset</button>
+      </div>
+
+      <p><strong>Actions A:</strong> {{ match["actions_A"] }}</p>
+      <p><strong>Actions B:</strong> {{ match["actions_B"] }}</p>
+    </div>
+  {% endfor %}
+
+  <!-- Sound alert -->
+  <audio id="alertSound" src="https://www.soundjay.com/button/beep-07.mp3" preload="auto"></audio>
+
+  <script>
+    const timers = {};
+    const intervals = {};
+    const alertSound = document.getElementById("alertSound");
+    const matchDuration = 300; // 5 minutes in seconds
+
+    function startTimer(id) {
+      if (!timers[id]) timers[id] = 0;
+      if (intervals[id]) return;
+      intervals[id] = setInterval(() => {
+        timers[id]++;
+        const minutes = String(Math.floor(timers[id] / 60)).padStart(2, '0');
+        const seconds = String(timers[id] % 60).padStart(2, '0');
+        document.getElementById(`timer${id}`).textContent = `${minutes}:${seconds}`;
+        if (timers[id] === matchDuration) {
+          stopTimer(id);
+          alertSound.play();
+          alert(`Match ${id + 1} time is up!`);
+        }
+      }, 1000);
+    }
+
+    function stopTimer(id) {
+      clearInterval(intervals[id]);
+      intervals[id] = null;
+    }
+
+    function resetTimer(id) {
+      stopTimer(id);
+      timers[id] = 0;
+      document.getElementById(`timer${id}`).textContent = "00:00";
+    }
+  </script>
+</body>
+</html>
